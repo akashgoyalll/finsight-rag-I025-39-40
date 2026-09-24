@@ -41,8 +41,7 @@ python -m pytest tests/ -v                            # 6 unit/integration tests
 pip install langchain-<provider> && export LLM_MODEL="<provider>:<model>" <PROVIDER>_API_KEY=...
 python scripts/ask.py "What were NIKE's total revenues in fiscal 2023?"
 ```
-Colab: [open the notebook](https://colab.research.google.com/github/akashgoyalll/finsight-rag-I025-39-40/blob/main/notebooks/FinSight_RAG_Phase2.ipynb) · executed run with outputs: `notebooks/FinSight_RAG_Phase2_executed.ipynb`.
-
+Colab: [open the notebook](https://colab.research.google.com/github/akashgoyalll/finsight-rag-I025-39-40/blob/main/notebooks/FinSight_RAG_Phase2.ipynb) · executed 
 ## Data
 Development filing: **NIKE, Inc. FY2023 Form 10-K** (107 pages) — the example filing from LangChain's official
 RAG tutorial. Any text-based annual report / 10-K PDF can be dropped into `data/`. Scanned PDFs are not supported
@@ -74,6 +73,6 @@ behind the improvement we plan to test in Phase 3: hybrid (semantic + keyword) r
 src/finsight/  loader.py · embeddings.py · indexing.py · chain.py
 scripts/       run_retrieval_demo.py · ask.py · get_data.sh
 tests/         test_pipeline.py · questions.json
-notebooks/     FinSight_RAG_Phase2.ipynb · FinSight_RAG_Phase2_executed.ipynb (Colab run)
+notebooks/     FinSight_RAG_Phase2.ipynb 
 outputs/       run logs and JSON results
 ```
