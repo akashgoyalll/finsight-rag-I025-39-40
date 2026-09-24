@@ -1,0 +1,13 @@
+platform linux -- Python 3.12.3, pytest-9.1.1, pluggy-1.6.0 -- /usr/bin/python
+rootdir: /home/claude/finsight-rag
+plugins: anyio-4.15.1, langsmith-0.14.0
+collecting ... collected 6 items
+
+tests/test_pipeline.py::test_loader_attaches_source_and_page PASSED      [ 16%]
+tests/test_pipeline.py::test_metadata_survives_chunking PASSED           [ 33%]
+tests/test_pipeline.py::test_retriever_returns_cited_chunks PASSED       [ 50%]
+tests/test_pipeline.py::test_parser_rejects_malformed_output PASSED      [ 66%]
+tests/test_pipeline.py::test_sources_resolved_from_metadata_not_llm PASSED [ 83%]
+tests/test_pipeline.py::test_full_lcel_chain_and_memory_wiring PASSED    [100%]
+
+============================== 6 passed in 34.18s ==============================

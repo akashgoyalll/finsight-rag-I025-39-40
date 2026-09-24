@@ -1,0 +1,15 @@
+============================= test session starts ==============================
+platform linux -- Python 3.13.15, pytest-8.4.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /content/finsight-rag/finsight-rag
+plugins: langsmith-0.12.1, anyio-4.14.2, typeguard-4.6.0
+collected 6 items                                                              
+
+tests/test_pipeline.py::test_loader_attaches_source_and_page PASSED      [ 16%]
+tests/test_pipeline.py::test_metadata_survives_chunking PASSED           [ 33%]
+tests/test_pipeline.py::test_retriever_returns_cited_chunks PASSED       [ 50%]
+tests/test_pipeline.py::test_parser_rejects_malformed_output PASSED      [ 66%]
+tests/test_pipeline.py::test_sources_resolved_from_metadata_not_llm PASSED [ 83%]
+tests/test_pipeline.py::test_full_lcel_chain_and_memory_wiring PASSED    [100%]
+
+========================= 6 passed in 75.32s (0:01:15) =========================

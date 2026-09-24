@@ -1,0 +1,13 @@
+# Versions tested for Phase 2 (24 Sept 2026). langchain-community is intentionally NOT used (sunset 2026).
+langchain==1.4.2
+langchain-core==1.6.4
+langchain-text-splitters==1.1.2
+langchain-chroma==1.1.0
+chromadb==1.5.9
+langchain-huggingface==1.2.2
+sentence-transformers
+pypdf==5.9.0
+scikit-learn==1.8.0
+pydantic==2.13.5
+pytest
+# Phase 3: add the LangChain partner package for your chosen LLM provider, e.g. langchain-openai
