@@ -17,7 +17,7 @@ def model_name() -> str:
     return os.getenv("LLM_MODEL") or DEFAULT_MODEL
 
 
-def get_llm(model: str | None = None):
+def get_llm(model: str | None = None, **overrides):
     model = model or model_name()
     kwargs = {} if "gemini-3" in model else {"temperature": 0}
-    return init_chat_model(model, **kwargs)
+    return init_chat_model(model, **{**kwargs, **overrides})

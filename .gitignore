@@ -1,6 +1,0 @@
-__pycache__/
-*.pyc
-.env
-chroma_db/
-data/*.pdf
-.ipynb_checkpoints/

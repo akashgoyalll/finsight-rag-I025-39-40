@@ -50,7 +50,7 @@ pip install -r requirements.txt
 bash scripts/get_data.sh                               # downloads the NIKE FY2023 10-K (107 pages)
 python -m pytest tests/ -v                             # 11 tests, offline, no API key needed
 export GOOGLE_API_KEY=...                              # Gemini key from Google AI Studio (never commit it)
-python scripts/run_phase3.py                           # full evaluation -> outputs/phase3_*.{json,md}
+python scripts/run_phase3.py                           # full evaluation -> outputs/phase3_*.{json,md}; resumable, free-tier paced
 python scripts/ask.py "What were NIKE's total revenues in fiscal 2023?" "How much did that grow on a currency-neutral basis?"
 ```
 Other providers: `pip install langchain-<provider>` and set `LLM_MODEL="<provider>:<model>"` plus that provider's key.
@@ -73,27 +73,34 @@ not supported (pypdf has no OCR).
 | Q6 | multi-hop calculation (**expected weak case**) | Greater China, 31.5% = 2,283 / 7,248 (computed from p. 39) |
 | Q7 | unanswerable control | not in the filing → `answerable: false` |
 
-## Results
-Phase 3 results (retrieval comparison, answers, automatic checks, multi-turn test) are in
-[`outputs/phase3_summary.md`](outputs/phase3_summary.md) and `outputs/phase3_results.json`, produced by
-`scripts/run_phase3.py` in Google Colab. The manual grounding review is in the technical report.
+## Results (Phase 3, Google Colab, `gemini-3.5-flash`, 1 Oct 2026)
+Full output: [`outputs/phase3_summary.md`](outputs/phase3_summary.md), log `outputs/phase3_log_colab.txt`, executed notebook
+`notebooks/FinSight_RAG_Phase3_executed_colab.ipynb`. Manual grounding review and discussion: [technical report](docs/FinSight-RAG_Technical_Report.pdf).
 
-Phase 2 retrieval baseline (top-4; HIT = evidence string found in the retrieved chunks):
+**Retrieval (Q1–Q6)**: HIT = evidence string found in the retrieved chunks.
 
-| Q | Semantic (MiniLM) | Keyword (TF-IDF) |
-|---|---|---|
-| Q1 | HIT | MISS |
-| Q2 | MISS | HIT |
-| Q3 | HIT | HIT |
-| Q4 | HIT | HIT |
-| Q5 | MISS* | HIT |
-| Q6 | HIT | MISS |
-| **hit-rate** | **4/6** | **4/6** |
+| Retriever | Q1 | Q2 | Q3 | Q4 | Q5 | Q6 | Hit-rate |
+|---|---|---|---|---|---|---|---|
+| Semantic top-4 (Phase 2) | HIT | miss | HIT | HIT | miss* | HIT | 4/6 |
+| Keyword (TF-IDF) top-4 | miss | HIT | HIT | HIT | HIT | miss | 4/6 |
+| Semantic / keyword top-6 | | | | | | | 4/6 each |
+| **Hybrid RRF top-4 / top-6** | HIT | HIT | HIT | HIT | HIT | HIT | **6/6** |
 
 \* False negative of the string check: the retrieved p. 46 is relevant but lacks the exact phrase.
 
+**Answers (Q1–Q7)**, same prompt and model, only the retriever changed:
+
+| | Correct | Notes |
+|---|---|---|
+| Phase 2 retriever (semantic top-4) | 6/7 | Q2: p. 9 not retrieved → "excerpts do not contain" (safe but wrong) |
+| **Final system (hybrid top-6)** | **7/7** | every figure found on the cited page; Q7 (FY2025, not in filing) declined with `answerable=false` |
+
+The designed weak case Q6 (segment EBIT margins, not stated in the filing) passed: the model computed Greater China 31.50%,
+APLA 30.04%, EMEA 26.31%, North America 25.24% from p. 39. Multi-turn: the follow-up "How much did that grow on a
+currency-neutral basis?" was rewritten to a standalone query and answered 16% (correct). Without rewriting it was also correct in this test.
+
 ## Limitations
-Single filing indexed; pypdf flattens tables into text; evaluation set is small (7 questions) and the automatic
+Single filing indexed; pypdf flattens tables into text (Q6 relies on the LLM's own arithmetic); evaluation set is small (7 questions) and the automatic
 checks are string-based (backed by a manual review); `RunnableWithMessageHistory` is deprecated in
 langchain-core 1.6 (works, but LangChain now recommends LangGraph persistence); memory is in-process only.
 
@@ -102,7 +109,7 @@ langchain-core 1.6 (works, but LangChain now recommends LangGraph persistence); 
 src/finsight/  loader.py · embeddings.py · indexing.py · hybrid.py · chain.py · llm.py
 scripts/       run_phase3.py · ask.py · run_retrieval_demo.py · get_data.sh
 tests/         test_pipeline.py (11 tests) · questions.json
-notebooks/     FinSight_RAG_Phase3.ipynb (final) · FinSight_RAG_Phase2.ipynb
-docs/          architecture.png / .svg
+notebooks/     FinSight_RAG_Phase3.ipynb (final) · FinSight_RAG_Phase3_executed_colab.ipynb · FinSight_RAG_Phase2.ipynb
+docs/          architecture.png / .svg · FinSight-RAG_Technical_Report.pdf
 outputs/       run logs and JSON results (Phase 2 and Phase 3)
 ```
