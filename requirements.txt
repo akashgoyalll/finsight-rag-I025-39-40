@@ -10,4 +10,5 @@ pypdf==5.9.0
 scikit-learn==1.8.0
 pydantic==2.13.5
 pytest
-# Phase 3: add the LangChain partner package for your chosen LLM provider, e.g. langchain-openai
+# Phase 3 LLM provider (Google Gemini via init_chat_model "google_genai:<model>"); tested 1 Oct 2026
+langchain-google-genai==4.4.0

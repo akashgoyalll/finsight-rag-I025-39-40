@@ -24,6 +24,7 @@ print(f"Sample chunk meta  : {chunks[100].metadata}")
 print(f"Index build time   : {time.time()-t0:.1f}s   | retriever top-k = {K}\n")
 
 qs = json.loads((ROOT / "tests" / "questions.json").read_text())
+qs = [q for q in qs if not q.get("expect_unanswerable")]  # Q7 (Phase 3) has no evidence to retrieve
 results = []
 for q in qs:
     docs = retriever.invoke(q["question"])
