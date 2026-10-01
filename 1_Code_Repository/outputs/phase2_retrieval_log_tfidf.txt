@@ -1,0 +1,54 @@
+Embeddings backend : tfidf
+Pages loaded       : 107  (nke-10k-2023.pdf)
+Chunks created     : 516  (size=1000, overlap=200)
+Sample chunk meta  : {'source': 'nke-10k-2023.pdf', 'page': 16, 'total_pages': 107, 'start_index': 3705}
+Index build time   : 10.5s   | retriever top-k = 4
+
+Q1 [numeric lookup]
+   Q: What were NIKE, Inc.'s total revenues in fiscal 2023?
+   truth : $51.2 billion ($51,217 million), +10% reported / +16% currency-neutral
+   retrieved pages: [42, 43, 41, 40]   -> MISS (evidence NOT found)
+Q2 [factual lookup]
+   Q: How many employees did NIKE have as of May 31, 2023?
+   truth : approximately 83,700 employees worldwide
+   retrieved pages: [28, 9, 79, 9]   -> HIT  (evidence found: 83,700)
+Q3 [numeric + explanation]
+   Q: How did gross margin change in fiscal 2023 compared to fiscal 2022?
+   truth : decreased 250 bps to 43.5% from 46.0%
+   retrieved pages: [37, 38, 48, 47]   -> HIT  (evidence found: 250 basis points)
+Q4 [numeric lookup]
+   Q: How much did NIKE Direct revenues grow in fiscal 2023?
+   truth : +14%, from $18.7 billion to $21.3 billion
+   retrieved pages: [36, 31, 41, 40]   -> HIT  (evidence found: $21.3 billion)
+Q5 [narrative / risk]
+   Q: What risks does NIKE face from fluctuations in foreign currency exchange rates?
+   truth : risk-factor discussion of FX exposure (narrative)
+   retrieved pages: [14, 41, 14, 32]   -> HIT  (evidence found: foreign currency exchange rate)
+Q6 [multi-hop calculation (expected weak case)]
+   Q: Which NIKE Brand geographic segment had the highest EBIT margin in fiscal 2023?
+   truth : Greater China, 31.5% (2,283/7,248) -- computed; margin by segment is not stated in the filing. North America has the highest absolute EBIT but the lowest margin (25.2%).
+   retrieved pages: [32, 39, 37, 39]   -> MISS (needs ['5,454', '21,608']; found ['5,454'])
+
+Retrieval evidence hit-rate: 4/6
+
+--- Grounded prompt preview (Q1, system message, truncated) ---
+You are a financial report analyst. Answer the question using ONLY the numbered excerpts from the company filing below. Do not use outside knowledge. If the excerpts do not contain the answer, set answerable=false and say so.
+
+Excerpts:
+[1] (nke-10k-2023.pdf, p.42)
+Table of Contents
+GREATER CHINA
+(Dollars in millions) FISCAL 2023 FISCAL 2022 % CHANGE
+% CHANGEEXCLUDINGCURRENCYCHANGESFISCAL 2021 % CHANGE
+% CHANGEEXCLUDINGCURRENCYCHANGES
+Revenues by:
+Footwear $ 5,435 $ 5,416 0 % 8 %$ 5,748 -6 % -10 %
+Apparel 1,666 1,938 -14 % -7 % 2,347 -17 % -21 %
+Equipment 147 193 -24 % -18 % 195 -1 % -6 %
+TOTAL REVENUES $ 7,248 $ 7,547 -4 % 4 %$ 8,290 -9 % -13 %
+Revenues by:    
+Sales to Wholesale Customers $ 3,866 $ 4,081 -5 % 2 %$ 4,513 -10 % -14 %
+Sales through NIKE Direct 3,382 3,466 -2 % 5 % 3,777 -8 % -12 %
+TOTAL REVENUES $ 7,248 $ 7,547 -4 % 4 %$ 8,290 -9 % -13 %
+EARNINGS BEFORE INTEREST AND TAXES
+  [...]

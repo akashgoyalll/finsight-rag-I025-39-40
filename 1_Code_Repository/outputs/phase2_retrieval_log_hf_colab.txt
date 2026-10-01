@@ -1,0 +1,46 @@
+Embeddings backend : hf
+Pages loaded       : 107  (nke-10k-2023.pdf)
+Chunks created     : 516  (size=1000, overlap=200)
+Sample chunk meta  : {'source': 'nke-10k-2023.pdf', 'page': 16, 'total_pages': 107, 'start_index': 3705}
+Index build time   : 90.4s   | retriever top-k = 4
+
+Q1 [numeric lookup]
+   Q: What were NIKE, Inc.'s total revenues in fiscal 2023?
+   truth : $51.2 billion ($51,217 million), +10% reported / +16% currency-neutral
+   retrieved pages: [36, 89, 31, 32]   -> HIT  (evidence found: $51.2 billion)
+Q2 [factual lookup]
+   Q: How many employees did NIKE have as of May 31, 2023?
+   truth : approximately 83,700 employees worldwide
+   retrieved pages: [4, 86, 6, 36]   -> MISS (evidence NOT found)
+Q3 [numeric + explanation]
+   Q: How did gross margin change in fiscal 2023 compared to fiscal 2022?
+   truth : decreased 250 bps to 43.5% from 46.0%
+   retrieved pages: [37, 38, 47, 31]   -> HIT  (evidence found: 250 basis points)
+Q4 [numeric lookup]
+   Q: How much did NIKE Direct revenues grow in fiscal 2023?
+   truth : +14%, from $18.7 billion to $21.3 billion
+   retrieved pages: [36, 36, 31, 43]   -> HIT  (evidence found: $21.3 billion)
+Q5 [narrative / risk]
+   Q: What risks does NIKE face from fluctuations in foreign currency exchange rates?
+   truth : risk-factor discussion of FX exposure (narrative)
+   retrieved pages: [46, 46, 82, 88]   -> MISS (evidence NOT found)
+Q6 [multi-hop calculation (expected weak case)]
+   Q: Which NIKE Brand geographic segment had the highest EBIT margin in fiscal 2023?
+   truth : Greater China, 31.5% (2,283/7,248) -- computed; margin by segment is not stated in the filing. North America has the highest absolute EBIT but the lowest margin (25.2%).
+   retrieved pages: [39, 39, 39, 32]   -> HIT  (needs ['5,454', '21,608']; found ['5,454', '21,608'])
+
+Retrieval evidence hit-rate: 4/6
+
+--- Grounded prompt preview (Q1, system message, truncated) ---
+You are a financial report analyst. Answer the question using ONLY the numbered excerpts from the company filing below. Do not use outside knowledge. If the excerpts do not contain the answer, set answerable=false and say so.
+
+Excerpts:
+[1] (nke-10k-2023.pdf, p.36)
+Table of Contents
+FISCAL 2023 NIKE BRAND REVENUE HIGHLIGHTSThe following tables present NIKE Brand revenues disaggregated by reportable operating segment, distribution channel and major product line:
+FISCAL 2023 COMPARED TO FISCAL 2022
+• NIKE, Inc. Revenues were $51.2 billion in fiscal 2023, which increased 10% and 16% compared to fiscal 2022 on a reported and currency-neutral basis, respectively.
+The increase was due to higher revenues in North America, Europe, Middle East & Africa ("EMEA"), APLA and Greater China, which contributed approximately 7, 6,
+2 and 1 percentage points to NIKE, Inc. Revenues, respectively.
+• NIKE Bra
+  [...]

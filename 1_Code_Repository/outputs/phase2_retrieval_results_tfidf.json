@@ -1,0 +1,128 @@
+[
+  {
+    "id": "Q1",
+    "type": "numeric lookup",
+    "question": "What were NIKE, Inc.'s total revenues in fiscal 2023?",
+    "ground_truth": "$51.2 billion ($51,217 million), +10% reported / +16% currency-neutral",
+    "evidence_any": [
+      "$51.2 billion",
+      "51,217"
+    ],
+    "source_pages": [
+      31,
+      36,
+      39
+    ],
+    "retrieved_pages": [
+      42,
+      43,
+      41,
+      40
+    ],
+    "evidence_retrieved": false,
+    "note": "evidence NOT found"
+  },
+  {
+    "id": "Q2",
+    "type": "factual lookup",
+    "question": "How many employees did NIKE have as of May 31, 2023?",
+    "ground_truth": "approximately 83,700 employees worldwide",
+    "evidence_any": [
+      "83,700"
+    ],
+    "source_pages": [
+      9
+    ],
+    "retrieved_pages": [
+      28,
+      9,
+      79,
+      9
+    ],
+    "evidence_retrieved": true,
+    "note": "evidence found: 83,700"
+  },
+  {
+    "id": "Q3",
+    "type": "numeric + explanation",
+    "question": "How did gross margin change in fiscal 2023 compared to fiscal 2022?",
+    "ground_truth": "decreased 250 bps to 43.5% from 46.0%",
+    "evidence_any": [
+      "250 basis points"
+    ],
+    "source_pages": [
+      37
+    ],
+    "retrieved_pages": [
+      37,
+      38,
+      48,
+      47
+    ],
+    "evidence_retrieved": true,
+    "note": "evidence found: 250 basis points"
+  },
+  {
+    "id": "Q4",
+    "type": "numeric lookup",
+    "question": "How much did NIKE Direct revenues grow in fiscal 2023?",
+    "ground_truth": "+14%, from $18.7 billion to $21.3 billion",
+    "evidence_any": [
+      "$21.3 billion"
+    ],
+    "source_pages": [
+      31,
+      36
+    ],
+    "retrieved_pages": [
+      36,
+      31,
+      41,
+      40
+    ],
+    "evidence_retrieved": true,
+    "note": "evidence found: $21.3 billion"
+  },
+  {
+    "id": "Q5",
+    "type": "narrative / risk",
+    "question": "What risks does NIKE face from fluctuations in foreign currency exchange rates?",
+    "ground_truth": "risk-factor discussion of FX exposure (narrative)",
+    "evidence_any": [
+      "foreign currency exchange rate"
+    ],
+    "source_pages": [
+      13,
+      14
+    ],
+    "retrieved_pages": [
+      14,
+      41,
+      14,
+      32
+    ],
+    "evidence_retrieved": true,
+    "note": "evidence found: foreign currency exchange rate"
+  },
+  {
+    "id": "Q6",
+    "type": "multi-hop calculation (expected weak case)",
+    "question": "Which NIKE Brand geographic segment had the highest EBIT margin in fiscal 2023?",
+    "ground_truth": "Greater China, 31.5% (2,283/7,248) -- computed; margin by segment is not stated in the filing. North America has the highest absolute EBIT but the lowest margin (25.2%).",
+    "evidence_all": [
+      "5,454",
+      "21,608"
+    ],
+    "source_pages": [
+      39
+    ],
+    "retrieved_pages": [
+      32,
+      39,
+      37,
+      39
+    ],
+    "evidence_retrieved": false,
+    "note": "needs ['5,454', '21,608']; found ['5,454']"
+  }
+]

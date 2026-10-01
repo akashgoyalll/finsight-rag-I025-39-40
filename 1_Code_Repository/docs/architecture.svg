@@ -1,0 +1,164 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" font-family="DejaVu Sans, Arial, sans-serif">
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#374151"/>
+    </marker>
+    <marker id="m" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/>
+    </marker>
+    <style>
+      .t{font-size:15px;font-weight:700;fill:#111827}
+      .s{font-size:13px;fill:#374151}
+      .c{font-size:12px;fill:#1d4ed8;font-weight:700}
+      .lane{font-size:18px;font-weight:700;fill:#374151}
+      .ln{stroke:#374151;stroke-width:2;fill:none;stroke-linejoin:round}
+      .mem{stroke:#7c3aed;stroke-width:2;fill:none;stroke-dasharray:7 5}
+      .box{fill:#f9fafb;stroke:#9ca3af;stroke-width:1.5}
+      .lc{fill:#eff6ff;stroke:#2563eb;stroke-width:2.5}
+      .llm{fill:#fff7ed;stroke:#ea580c;stroke-width:2.5}
+      .out{fill:#ecfdf5;stroke:#059669;stroke-width:2.5}
+      .new{fill:#dc2626;font-size:11px;font-weight:700}
+    </style>
+  </defs>
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <text x="40" y="42" font-size="24" font-weight="700" fill="#111827">FinSight-RAG — architecture (Phase 3 final system)</text>
+  <text x="40" y="66" class="s">Every answer is returned with the document name and page of the supporting passage. Blue = LangChain component, orange = LLM, green = output, red tag = added in Phase 3.</text>
+
+  <!-- Lane 1 -->
+  <rect x="20" y="82" width="1560" height="240" rx="14" fill="#f3f4f6"/>
+  <text x="40" y="110" class="lane">① Indexing — once per filing</text>
+
+  <rect x="40" y="150" width="215" height="96" rx="10" class="box"/>
+  <text x="58" y="180" class="t">Company filing (PDF)</text>
+  <text x="58" y="203" class="s">NIKE, Inc. FY2023 10-K</text>
+  <text x="58" y="222" class="s">107 pages, text-based</text>
+
+  <rect x="295" y="150" width="250" height="96" rx="10" class="box"/>
+  <text x="311" y="180" class="t">load_pdf (pypdf)</text>
+  <text x="311" y="203" class="s">1 Document per page</text>
+  <text x="311" y="222" class="s">metadata: source, page (1-based)</text>
+
+  <rect x="585" y="150" width="290" height="96" rx="10" class="lc"/>
+  <text x="601" y="172" class="c">TEXT SPLITTER</text>
+  <text x="601" y="193" class="t">RecursiveCharacterTextSplitter</text>
+  <text x="601" y="214" class="s">1000 chars / 200 overlap → 516 chunks</text>
+  <text x="601" y="233" class="s">source, page, start_index kept</text>
+
+  <rect x="915" y="118" width="245" height="78" rx="10" class="lc"/>
+  <text x="931" y="140" class="c">EMBEDDINGS (semantic)</text>
+  <text x="931" y="162" class="t">HuggingFaceEmbeddings</text>
+  <text x="931" y="182" class="s">all-MiniLM-L6-v2</text>
+
+  <rect x="915" y="214" width="245" height="78" rx="10" class="lc"/>
+  <text x="931" y="236" class="c">EMBEDDINGS (keyword)</text>
+  <text x="931" y="258" class="t">TfidfEmbeddings</text>
+  <text x="931" y="278" class="s">scikit-learn TF-IDF, 1–2-grams</text>
+  <text x="1110" y="236" class="new">NEW</text>
+
+  <rect x="1215" y="118" width="230" height="78" rx="10" class="lc"/>
+  <text x="1231" y="140" class="c">VECTOR STORE</text>
+  <text x="1231" y="162" class="t">Chroma — semantic</text>
+  <text x="1231" y="182" class="s">own collection per build</text>
+
+  <rect x="1215" y="214" width="230" height="78" rx="10" class="lc"/>
+  <text x="1231" y="236" class="c">VECTOR STORE</text>
+  <text x="1231" y="258" class="t">Chroma — keyword</text>
+  <text x="1231" y="278" class="s">own collection per build</text>
+  <text x="1400" y="236" class="new">NEW</text>
+
+  <path d="M255,198 H289" class="ln" marker-end="url(#a)"/>
+  <path d="M545,198 H579" class="ln" marker-end="url(#a)"/>
+  <path d="M875,198 H893 V157 H909" class="ln" marker-end="url(#a)"/>
+  <path d="M893,198 V253 H909" class="ln" marker-end="url(#a)"/>
+  <path d="M1160,157 H1209" class="ln" marker-end="url(#a)"/>
+  <path d="M1160,253 H1209" class="ln" marker-end="url(#a)"/>
+
+  <!-- Lane 2 -->
+  <rect x="20" y="338" width="1560" height="400" rx="14" fill="#f3f4f6"/>
+  <text x="40" y="366" class="lane">② Question answering — per question</text>
+
+  <rect x="40" y="400" width="200" height="96" rx="10" class="box"/>
+  <text x="58" y="430" class="t">User question</text>
+  <text x="58" y="453" class="s">+ session_id</text>
+  <text x="58" y="472" class="s">(for follow-ups)</text>
+
+  <rect x="285" y="400" width="240" height="96" rx="10" class="lc"/>
+  <text x="301" y="422" class="c">PROMPT + LLM (if history)</text>
+  <text x="301" y="444" class="t">Follow-up rewriting</text>
+  <text x="301" y="465" class="s">"that" → standalone question</text>
+  <text x="301" y="484" class="s">used as the retrieval query</text>
+  <text x="484" y="422" class="new">NEW</text>
+
+  <rect x="570" y="390" width="270" height="116" rx="10" class="lc"/>
+  <text x="586" y="412" class="c">RETRIEVER (BaseRetriever)</text>
+  <text x="586" y="434" class="t">HybridRetriever</text>
+  <text x="586" y="456" class="s">semantic top-4 + keyword top-4</text>
+  <text x="586" y="475" class="s">Reciprocal Rank Fusion (k=60)</text>
+  <text x="586" y="494" class="s">→ top-6 chunks with metadata</text>
+  <text x="800" y="412" class="new">NEW</text>
+
+  <rect x="885" y="390" width="300" height="116" rx="10" class="lc"/>
+  <text x="901" y="412" class="c">PROMPT</text>
+  <text x="901" y="434" class="t">ChatPromptTemplate</text>
+  <text x="901" y="456" class="s">"answer ONLY from the excerpts"</text>
+  <text x="901" y="475" class="s">[1] (nke-10k-2023.pdf, p.36) …</text>
+  <text x="901" y="494" class="s">+ chat history + JSON format rules</text>
+
+  <rect x="1230" y="390" width="330" height="116" rx="10" class="llm"/>
+  <text x="1246" y="412" font-size="12" font-weight="700" fill="#c2410c">LLM (init_chat_model)</text>
+  <text x="1246" y="434" class="t">Google Gemini</text>
+  <text x="1246" y="456" class="s">google_genai:gemini-3.5-flash</text>
+  <text x="1246" y="475" class="s">provider-agnostic: change LLM_MODEL</text>
+  <text x="1246" y="494" class="s">to switch model</text>
+
+  <rect x="1230" y="580" width="330" height="116" rx="10" class="lc"/>
+  <text x="1246" y="602" class="c">OUTPUT PARSER</text>
+  <text x="1246" y="624" class="t">PydanticOutputParser</text>
+  <text x="1246" y="646" class="s">FinancialAnswer:</text>
+  <text x="1246" y="665" class="s">answer · answerable · used_excerpts</text>
+  <text x="1246" y="684" class="s">(malformed output → error, not a guess)</text>
+
+  <rect x="885" y="580" width="300" height="116" rx="10" class="box"/>
+  <text x="901" y="610" class="t">resolve_sources</text>
+  <text x="901" y="633" class="s">excerpt number → document + page</text>
+  <text x="901" y="652" class="s">taken from chunk metadata, so the</text>
+  <text x="901" y="671" class="s">LLM cannot invent a page number</text>
+
+  <rect x="570" y="580" width="270" height="116" rx="10" class="out"/>
+  <text x="586" y="610" class="t">Answer (JSON)</text>
+  <text x="586" y="633" class="s">answer, answerable,</text>
+  <text x="586" y="652" class="s">sources: [document, page,</text>
+  <text x="586" y="671" class="s">passage], retrieval_query</text>
+
+  <rect x="40" y="580" width="485" height="116" rx="10" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5"/>
+  <text x="56" y="602" font-size="12" font-weight="700" fill="#6d28d9">MEMORY</text>
+  <text x="56" y="624" class="t">RunnableWithMessageHistory</text>
+  <text x="56" y="646" class="s">InMemoryChatMessageHistory per session_id</text>
+  <text x="56" y="665" class="s">stores each question + answer; injects the history</text>
+  <text x="56" y="684" class="s">into the rewriting step and the answer prompt</text>
+
+  <!-- query flow -->
+  <path d="M240,448 H279" class="ln" marker-end="url(#a)"/>
+  <path d="M525,448 H564" class="ln" marker-end="url(#a)"/>
+  <path d="M840,448 H879" class="ln" marker-end="url(#a)"/>
+  <path d="M1185,448 H1224" class="ln" marker-end="url(#a)"/>
+  <path d="M1395,506 V574" class="ln" marker-end="url(#a)"/>
+  <path d="M1230,638 H1191" class="ln" marker-end="url(#a)"/>
+  <path d="M885,638 H846" class="ln" marker-end="url(#a)"/>
+  <!-- indexes feed the retriever -->
+  <path d="M1445,157 H1475 V253 M1445,253 H1475 M1475,253 V322 H705 V384" class="ln" marker-end="url(#a)"/>
+  <text x="1100" y="314" class="s">each question searches both indexes</text>
+  <!-- memory loop -->
+  <path d="M570,660 H531" class="mem" marker-end="url(#m)"/>
+  <path d="M405,580 V502" class="mem" marker-end="url(#m)"/>
+  <path d="M470,580 V540 H1035 V512" class="mem" marker-end="url(#m)"/>
+  <text x="600" y="534" font-size="12" fill="#6d28d9">history → prompt</text>
+  <text x="532" y="720" font-size="12" fill="#6d28d9">save turn</text>
+
+  <!-- legend / components -->
+  <rect x="20" y="752" width="1560" height="130" rx="14" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="40" y="780" class="lane">LangChain components used (brief requires ≥ 3)</text>
+  <text x="40" y="808" class="s">1. VectorStoreRetriever (Chroma, langchain-chroma) + custom BaseRetriever (HybridRetriever) · 2. ChatPromptTemplate + MessagesPlaceholder · 3. LCEL composition (| , RunnablePassthrough.assign, RunnableBranch)</text>
+  <text x="40" y="832" class="s">4. PydanticOutputParser (structured JSON) + StrOutputParser · 5. Memory: RunnableWithMessageHistory · 6. init_chat_model (provider-agnostic LLM) · 7. RecursiveCharacterTextSplitter + HuggingFaceEmbeddings</text>
+  <text x="40" y="860" class="s">Not used: langchain-community (sunset 2026) — replaced by a pypdf loader with the same metadata and the langchain-chroma / langchain-huggingface partner packages.</text>
+</svg>
